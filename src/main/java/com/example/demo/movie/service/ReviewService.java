@@ -76,12 +76,19 @@ public class ReviewService {
     }
 
     public void update(ReviewDto reviewDto) {
-        reviewRepository.save(Review.builder()
-                .id(reviewDto.getId())
-                .star(reviewDto.getStar())
-                .text(reviewDto.getText())
-                .build());
+        Optional<Review> result = reviewRepository.findById(reviewDto.getId());
+        if (result.isPresent()) {
+            Review review = result.get();
+            review.setStar(reviewDto.getStar());
+            review.setText(reviewDto.getText());
+            reviewRepository.save(review);
+        }
     }
+
+
+
+
+
 
     public void delete(Integer id) {
         reviewRepository.delete(Review.builder().id(id).build());
